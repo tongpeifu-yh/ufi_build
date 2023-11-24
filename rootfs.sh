@@ -1,4 +1,9 @@
 #创建rootfs包
+#创建前，需要设定好目录结构软连接，如/bin->/usr/bin，debootstrap默认不会设置软连接而是新建目录
+#eg：
+sudo mkdir ./usr/bin 
+sudo ln -s ./usr/bin ./bin
+#如此重复sbin,lib,lib32,lib64,libx32等即可
 sudo qemu-debootstrap --arch=${ARCH} \
 --keyring /usr/share/keyrings/debian-archive-keyring.gpg \
 --variant=buildd \
