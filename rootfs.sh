@@ -4,6 +4,8 @@
 sudo mkdir ./usr/bin 
 sudo ln -s ./usr/bin ./bin
 #如此重复sbin,lib,lib32,lib64,libx32等即可
+for dir in sbin bin lib lib32 lib64 libx32;do sudo ln -s usr/$dir $dir; done
+
 sudo qemu-debootstrap --arch=${ARCH} \
 --keyring /usr/share/keyrings/debian-archive-keyring.gpg \
 --variant=buildd \
