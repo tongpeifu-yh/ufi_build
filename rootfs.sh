@@ -25,7 +25,7 @@ HOME=/root sudo chroot $ROOTFS /bin/bash --login -i
 #以下为在rootfs中进行的操作
 #需要安装的其他包有：
 #	linux内核
-#	openstick-utils
+#	openstick-utils(手动安装，现置于deb/目录下)
 #	firmware
 #最好还要安装：
 #   openssh-server
