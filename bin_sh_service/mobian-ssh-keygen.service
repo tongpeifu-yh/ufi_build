@@ -1,0 +1,12 @@
+[Unit]
+Description=Generate SSH host keys
+Before=ssh.service
+ConditionFirstBoot=yes
+ConditionPathExists=/usr/bin/ssh-keygen
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ssh-keygen -A
+
+[Install]
+WantedBy=multi-user.target

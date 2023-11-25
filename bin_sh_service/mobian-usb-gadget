@@ -1,0 +1,45 @@
+#!/bin/sh
+
+CONFIGFS=/sys/kernel/config/usb_gadget/g1
+
+setup() {
+#echo host > /sys/kernel/debug/usb/ci_hdrc.0/role
+    # Remove All Gadgets If Gadget Exist
+    [ -d $CONFIGFS ] && gc -c
+    
+    # Setiing Up Rndis
+    gc -a rndis
+    sleep 1
+
+    # Setting Up Adbd
+    gc -a ffs
+    mkdir -p /dev/usb-ffs/adb
+    
+    # in offical version of gc name will be ffs.x
+    mount -t functionfs adb /dev/usb-ffs/adb
+    
+    # Fire Up Adbd
+    adbd -D &
+    # (hack) wait adbd setup
+    sleep 1
+	
+    # Enable Gadget
+    gc -e
+    
+}
+
+reset() {
+    echo "Removing the USB gadget..."
+
+    # Remove USB gadget
+    if [ -d $CONFIGFS ]; then
+        echo "Removing gadget configuration..."
+        gc -c
+    fi
+}
+
+case "$1" in
+    reset) reset ;;
+    setup) setup ;;
+    *) ;;
+esac
