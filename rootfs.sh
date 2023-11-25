@@ -14,4 +14,8 @@ sudo qemu-debootstrap --arch=${ARCH} \
 #	linux内核
 #	openstick-utils
 #	firmware
+#最好还要安装：
+#  openssh-server
+#  net-tools
+#  
 #其中，linux内核的两个包必须用dpkg -i安装，否则不会生成initrd.img
