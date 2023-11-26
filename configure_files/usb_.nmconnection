@@ -1,0 +1,13 @@
+[connection]
+id=usb
+uuid=fa0ad694-a11a-46bd-9417-0b66ea105cbc
+type=ethernet
+interface-name=usb0
+master=0332def0-cc09-4509-9929-97c92d4f4b7b
+permissions=
+slave-type=bridge
+
+[ethernet]
+mac-address-blacklist=
+
+[bridge-port]

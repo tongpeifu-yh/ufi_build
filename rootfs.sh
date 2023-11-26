@@ -22,7 +22,7 @@ sudo qemu-debootstrap --arch=${ARCH} \
 #构建好底包，用如下命令登录：
 HOME=/root sudo chroot $ROOTFS /bin/bash --login -i
 
-#以下为在rootfs中进行的操作
+#以下为在rootfs chroot环境中进行的操作
 #需要安装的其他包有：
 #	linux内核
 #	openstick-utils(手动安装，现置于deb/目录下)
@@ -69,5 +69,11 @@ HOME=/root sudo chroot $ROOTFS /bin/bash --login -i
 #   依赖的脚本：
 #       mobian-setup-usb-network
 #       mobian-usb-gadget
+#添加的网络配置（安装到/etc/NetworkManager/system-connections/）：
+#       bridge.nmconnection  modem.nmconnection  USB.nmconnection  wifi.nmconnection usb.nmconnection
+#       两个usb.nmconnection，一个大写，一个小写，不知道有什么用
+#       小写的那个似乎是用于网桥的，由于windows不兼容，改名为usb_.nmconnection
+#以上网络服务与配置可能与openstick-utils有冲突，只能安装二者之一
+
 #重新配置语言为中文
 #sudo dpkg-reconfigure locales
