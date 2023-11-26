@@ -25,7 +25,7 @@ HOME=/root sudo chroot $ROOTFS /bin/bash --login -i
 #以下为在rootfs chroot环境中进行的操作
 #需要安装的其他包有：
 #	linux内核
-#	openstick-utils(手动安装，现置于deb/目录下)
+#	openstick-utils(手动安装，现置于deb/目录下，或者见https://github.com/hyx0329/openstick-failsafe-guard)
 #	firmware
 #最好还要安装：
 #   openssh-server
@@ -69,11 +69,21 @@ HOME=/root sudo chroot $ROOTFS /bin/bash --login -i
 #   依赖的脚本：
 #       mobian-setup-usb-network
 #       mobian-usb-gadget
-#添加的网络配置（安装到/etc/NetworkManager/system-connections/）：
+
+#添加的网络配置（安装到/etc/NetworkManager/system-connections/,权限改为600）：
 #       bridge.nmconnection  modem.nmconnection  USB.nmconnection  wifi.nmconnection usb.nmconnection
-#       两个usb.nmconnection，一个大写，一个小写，不知道有什么用
-#       小写的那个似乎是用于网桥的，由于windows不兼容，改名为usb_.nmconnection
+#       两个usb.nmconnection，一个大写，一个小写
+#       小写的那个似乎是用于网桥的，由于windows不兼容，改名为usb_.nmconnection,需要改回去
 #以上网络服务与配置可能与openstick-utils有冲突，只能安装二者之一
+#并且openstick-utils的服务是用deb-systemd-helper开启的，似乎有点那啥
+#       deb-systemd-helper disable 禁用服务？
+
+#可能还需要更改：（不清楚作用,现置于configure_files/）
+#   hosts
+#另外更改并启用：(启动时先开启再关闭USB，大概是为了启用usb？现置于bin_sh_service/)
+#rc.local（置于/etc/）
+#rc.local.service（置于/etc/systemd/system/）
+
 
 #重新配置语言为中文
 #sudo dpkg-reconfigure locales
