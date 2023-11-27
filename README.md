@@ -1,4 +1,5 @@
 # 随身wifi debian固件编译 记录
+适合有linux基础的人、折腾党看！入坑不深的直接用大佬编译好的包就行了！
 ## 本记录阅读顺序
 prepare.sh  
 kernel.sh  

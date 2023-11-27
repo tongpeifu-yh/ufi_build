@@ -6,6 +6,7 @@ wlan、qcom固件在/system/etc/firmware下，到安卓备份的system.img中的
 
 ## 2、电脑连接不上usb共享网络
 非常离谱的bug，必须先安装firmware，再安装编译好的内核，否则电脑就无法识别usb rndis网络
+
 ## 3、提取dts
 dtb不一定在boot.img中，而是在recovery.img中。  
 HandsomeHacker大佬在[我的4g网卡运行着GNU/Linux -- 某4g无线网卡的逆向工程与主线Linux移植 (一)](https://blog.csdn.net/github_38345754/article/details/121462292) 提供的方法不一定有效，反正我是不知道`unpackbootimg`要从哪里找。  
@@ -39,7 +40,10 @@ adbd未知，大概可用<https://github.com/tonyho/adbd-linux>构建？
 按照<https://github.com/hyx0329/openstick-failsafe-guard/blob/dev/bin/README.md>中的说法，[staticx](https://github.com/JonathonReinhart/staticx)可用用于转化可执行程序为静态链接
 
 ## 5、构建adbd
+警告：暂时未测试是否有效！建议还是用openstick-utils里面的！  
 构建<https://github.com/tonyho/adbd-linux>  
+构建好的相关文件已经打包至compiled_package/adbd.tar.gz，其中在adbd-linux目录下执行`make install`即可安装adbd，或者手动复制adb/adbd和adb/xdg-adbd两个文件到/usr/sbin，然后复制adbd.service到/usr/lib/systemd/system/后启用服务  
+
 首先构建1.0版本openssl   
 可以参照<https://blog.csdn.net/qq_32348883/article/details/123156198>  
 然后手动配置include头文件位置（从默认的/usr/local/ssl/include/openssl复制到/usr/include/openssl）,再手动配置lib文件（把两个lib*.a复制到/usr/lib）  
@@ -88,3 +92,13 @@ fatal error: glib.h: 没有那个文件或目录
 ```
 sudo apt-get install libglib2.0-dev
 ```
+
+编译后`make install`，输出   
+```
+install -d -m 0755 /usr/sbin
+install -D -m 0755 adb/adbd /usr/sbin
+install -D -m 0755 adb/xdg-adbd /usr/sbin
+install -d -m 0755 /usr/lib/systemd/system/
+install -D -m 0644 ./adbd.service /usr/lib/systemd/system/
+```
+可以看到就是复制了三个文件而已，完全可以手动安装
