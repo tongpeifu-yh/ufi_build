@@ -44,7 +44,9 @@ adbd未知，大概可用<https://github.com/tonyho/adbd-linux>构建？
 可以参照<https://blog.csdn.net/qq_32348883/article/details/123156198>  
 然后手动配置include头文件位置（从默认的/usr/local/ssl/include/openssl复制到/usr/include/openssl）,再手动配置lib文件（把两个lib*.a复制到/usr/lib）  
 然后编译安装adbd-linux，中间可能遇到：
-### a、 undefined reference to 'dlxxx'
+### a、 sys/capability.h 没有那个文件或目录
+capability.h在/usr/include/linux目录下面，在源码中把sys改为linux即可
+### b、 undefined reference to 'dlxxx'
 ```
 g++ -fPIC -O2 -g -std=c++14 -DADB_HOST=0 -Wall -Wno-unused-parameter -D_XOPEN_SOURCE -D_GNU_SOURCE -DHAVE_PTHREADS=1 -DADB_NON_ANDROID=1 -DADB_REVISION='"-android"' -DPROP_NAME_MAX=32 -DPROP_VALUE_MAX=92 -DALLOW_ADBD_NO_AUTH=1 -I../include -I../base/include/ -I../libcrypto_utils/include/ -I../adb adb.o adb_auth.o adb_utils.o adb_trace.o adb_io.o adb_listeners.o diagnose_usb.o shell_service.o shell_service_protocol.o sockets.o transport.o transport_local.o transport_usb.o log-non-android.o fdevent.o get_my_path_linux.o adb_auth_client.o services.o file_sync_service.o framebuffer_service.o remount_service.o set_verity_enable_state_service.o daemon/main.o usb_linux_client.o -L ../libcutils/*.o ../base/*.o ../libcrypto_utils/*.o -lpthread -lresolv -lcrypto -lssl -lutil -o adbd
 /usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/10/../../../../lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_globallookup':
@@ -76,7 +78,7 @@ make: *** [Makefile:38：adb/adbd] 错误 2
 ```
 g++ -fPIC -O2 -g -std=c++14 -DADB_HOST=0 -Wall -Wno-unused-parameter -D_XOPEN_SOURCE -D_GNU_SOURCE -DHAVE_PTHREADS=1 -DADB_NON_ANDROID=1 -DADB_REVISION='"-android"' -DPROP_NAME_MAX=32 -DPROP_VALUE_MAX=92 -DALLOW_ADBD_NO_AUTH=1 -I../include -I../base/include/ -I../libcrypto_utils/include/ -I../adb adb.o adb_auth.o adb_utils.o adb_trace.o adb_io.o adb_listeners.o diagnose_usb.o shell_service.o shell_service_protocol.o sockets.o transport.o transport_local.o transport_usb.o log-non-android.o fdevent.o get_my_path_linux.o adb_auth_client.o services.o file_sync_service.o framebuffer_service.o remount_service.o set_verity_enable_state_service.o daemon/main.o usb_linux_client.o -L ../libcutils/*.o ../base/*.o ../libcrypto_utils/*.o -lpthread -lresolv -lcrypto -lssl -lutil -ldl -o adbd
 ```
-### b、 glib.h: 没有那个文件或目录
+### c、 glib.h: 没有那个文件或目录
 ```
 fatal error: glib.h: 没有那个文件或目录
    17 | #include <glib.h>
