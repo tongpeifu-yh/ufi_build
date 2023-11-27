@@ -23,14 +23,21 @@ sudo qemu-debootstrap --arch=${ARCH} \
 HOME=/root sudo chroot $ROOTFS /bin/bash --login -i
 
 #以下为在rootfs chroot环境中进行的操作
+apt-get update
+apt -y install iputils-ping iproute2 lsb-release vim whois
+ln -sf bash /bin/sh
+ln -sf bash.1.gz /usr/share/man/man1/sh.1.gz
+
+apt -y install sudo
+apt -y install systemd systemd-sysv kmod
+apt -y install network-manager
+apt -y install parted
 #需要安装的其他包有：
+#	firmware（必须先安装它才能安装内核，否则有问题）
 #	linux内核
 #	openstick-utils(手动安装，现置于deb/目录下，或者见https://github.com/hyx0329/openstick-failsafe-guard)
-#	firmware
 #最好还要安装：
-#   openssh-server
-#   net-tools
-#   locales
+#   openssh-server net-tools locales
 #其中，linux内核的两个包必须用dpkg -i安装，否则不会生成initrd.img
 
 #以下内容通过分析苏苏小亮亮的rootfs得到

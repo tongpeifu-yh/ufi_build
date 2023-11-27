@@ -1,11 +1,14 @@
 # 注意事项
 ## 1、固件（firmware）
 一般固件在modem.img中，但现在发现大多在NON-HLOS.bin中，使用7-zip打开或者mount挂载（该文件本质为fat raw格式镜像），将image文件夹下的文件复制到/lib/firmware即可。  
-wlan、qcom固件在/system/etc/firmware下，到安卓备份的system.img中的etc文件夹下面找。但是wlan固件文件仅是软链接，需要安卓启动之后获取root权限到真正目录下找到。venus固件需要放对位置，qcom/venus-1.8/下，不可更改
-建议直接安装网上制作好的deb包
+wlan、qcom固件在/system/etc/firmware下，到安卓备份的system.img中的etc文件夹下面找。但是wlan固件文件仅是软链接，需要安卓启动之后获取root权限到真正目录下找到。venus固件需要放对位置，qcom/venus-1.8/下，不可更改。  
+建议直接安装网上制作好的deb包。  
 
-## 2、提取dts
-dtb不在boot.img中，而是在recovery.img中  
+## 2、电脑连接不上usb共享网络
+非常离谱的bug，必须先安装firmware，再安装编译好的内核，否则电脑就无法识别usb rndis网络
+## 3、提取dts
+dtb不一定在boot.img中，而是在recovery.img中。  
+HandsomeHacker大佬在[我的4g网卡运行着GNU/Linux -- 某4g无线网卡的逆向工程与主线Linux移植 (一)](https://blog.csdn.net/github_38345754/article/details/121462292) 提供的方法不一定有效，反正我是不知道`unpackbootimg`要从哪里找。  
 来自chatgpt的可用方法:  
 尝试使用 binwalk 工具结合手动提取的方法。下面是一种可能的步骤：
 ### (1) 安装 binwalk 与 Device Tree Compiler：
