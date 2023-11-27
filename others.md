@@ -32,3 +32,57 @@ dd if=recovery.img bs=1 skip=6955008 count=162799 of=device_tree.dtb
 ```
 dtc -I dtb -O dts -o output.dts device_tree.dtb
 ```
+
+## 4、gc与adbd
+gc来自：<https://github.com/HandsomeMod/gc>  
+adbd未知，大概可用<https://github.com/tonyho/adbd-linux>构建？  
+按照<https://github.com/hyx0329/openstick-failsafe-guard/blob/dev/bin/README.md>中的说法，[staticx](https://github.com/JonathonReinhart/staticx)可用用于转化可执行程序为静态链接
+
+## 5、构建adbd
+构建<https://github.com/tonyho/adbd-linux>  
+首先构建1.0版本openssl   
+可以参照<https://blog.csdn.net/qq_32348883/article/details/123156198>  
+然后手动配置include头文件位置（从默认的/usr/local/ssl/include/openssl复制到/usr/include/openssl）,再手动配置lib文件（把两个lib*.a复制到/usr/lib）  
+然后编译安装adbd-linux，中间可能遇到：
+### a、 undefined reference to 'dlxxx'
+```
+g++ -fPIC -O2 -g -std=c++14 -DADB_HOST=0 -Wall -Wno-unused-parameter -D_XOPEN_SOURCE -D_GNU_SOURCE -DHAVE_PTHREADS=1 -DADB_NON_ANDROID=1 -DADB_REVISION='"-android"' -DPROP_NAME_MAX=32 -DPROP_VALUE_MAX=92 -DALLOW_ADBD_NO_AUTH=1 -I../include -I../base/include/ -I../libcrypto_utils/include/ -I../adb adb.o adb_auth.o adb_utils.o adb_trace.o adb_io.o adb_listeners.o diagnose_usb.o shell_service.o shell_service_protocol.o sockets.o transport.o transport_local.o transport_usb.o log-non-android.o fdevent.o get_my_path_linux.o adb_auth_client.o services.o file_sync_service.o framebuffer_service.o remount_service.o set_verity_enable_state_service.o daemon/main.o usb_linux_client.o -L ../libcutils/*.o ../base/*.o ../libcrypto_utils/*.o -lpthread -lresolv -lcrypto -lssl -lutil -o adbd
+/usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/10/../../../../lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_globallookup':
+dso_dlfcn.c:(.text+0x1c): undefined reference to `dlopen'
+/usr/bin/ld: dso_dlfcn.c:(.text+0x2c): undefined reference to `dlsym'
+/usr/bin/ld: dso_dlfcn.c:(.text+0x3c): undefined reference to `dlclose'
+/usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/10/../../../../lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_bind_func':
+dso_dlfcn.c:(.text+0x394): undefined reference to `dlsym'
+/usr/bin/ld: dso_dlfcn.c:(.text+0x450): undefined reference to `dlerror'
+/usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/10/../../../../lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_bind_var':
+dso_dlfcn.c:(.text+0x4d8): undefined reference to `dlsym'
+/usr/bin/ld: dso_dlfcn.c:(.text+0x590): undefined reference to `dlerror'
+/usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/10/../../../../lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_load':
+dso_dlfcn.c:(.text+0x5f8): undefined reference to `dlopen'
+/usr/bin/ld: dso_dlfcn.c:(.text+0x65c): undefined reference to `dlclose'
+/usr/bin/ld: dso_dlfcn.c:(.text+0x694): undefined reference to `dlerror'
+/usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/10/../../../../lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_pathbyaddr':
+dso_dlfcn.c:(.text+0x728): undefined reference to `dladdr'
+/usr/bin/ld: dso_dlfcn.c:(.text+0x7a0): undefined reference to `dlerror'
+/usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/10/../../../../lib/libcrypto.a(dso_dlfcn.o): in function `dlfcn_unload':
+dso_dlfcn.c:(.text+0x7f4): undefined reference to `dlclose'
+collect2: error: ld returned 1 exit status
+make[1]: *** [Makefile:84：adbd] 错误 1
+make[1]: 离开目录“/root/adbd-linux/adb”
+make: *** [Makefile:38：adb/adbd] 错误 2
+```
+原因：缺少libdl库  
+解决：进入adb目录手动执行编译命令，并增加-ldl选项   
+```
+g++ -fPIC -O2 -g -std=c++14 -DADB_HOST=0 -Wall -Wno-unused-parameter -D_XOPEN_SOURCE -D_GNU_SOURCE -DHAVE_PTHREADS=1 -DADB_NON_ANDROID=1 -DADB_REVISION='"-android"' -DPROP_NAME_MAX=32 -DPROP_VALUE_MAX=92 -DALLOW_ADBD_NO_AUTH=1 -I../include -I../base/include/ -I../libcrypto_utils/include/ -I../adb adb.o adb_auth.o adb_utils.o adb_trace.o adb_io.o adb_listeners.o diagnose_usb.o shell_service.o shell_service_protocol.o sockets.o transport.o transport_local.o transport_usb.o log-non-android.o fdevent.o get_my_path_linux.o adb_auth_client.o services.o file_sync_service.o framebuffer_service.o remount_service.o set_verity_enable_state_service.o daemon/main.o usb_linux_client.o -L ../libcutils/*.o ../base/*.o ../libcrypto_utils/*.o -lpthread -lresolv -lcrypto -lssl -lutil -ldl -o adbd
+```
+### b、 glib.h: 没有那个文件或目录
+```
+fatal error: glib.h: 没有那个文件或目录
+   17 | #include <glib.h>
+```
+原因：未安装glib  
+解决：安装glib2.0  
+```
+sudo apt-get install libglib2.0-dev
+```
