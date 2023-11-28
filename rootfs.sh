@@ -84,7 +84,7 @@ apt -y install parted
 #       小写的那个似乎是用于网桥的，由于windows不兼容，改名为usb_.nmconnection,需要改回去
 #以上网络服务与配置可能与openstick-utils的网络配置有冲突，只能安装二者之一
 #并且openstick-utils的服务是用deb-systemd-helper开启的，似乎有点那啥
-#       deb-systemd-helper disable 禁用服务？
+#       deb-systemd-helper disable 禁用服务？似乎不能直接在shell执行deb-systemd-helper？
 
 #可能还需要更改：（不清楚作用,现置于configure_files/）
 #   hosts（复制到/etc/）
@@ -92,7 +92,7 @@ apt -y install parted
 #   rc.local（复制到/etc/）
 #   rc.local.service（复制到/etc/systemd/system/）
 #开启rc.local
-#   systemctl daemon-reload && systemctl enable rc-local
+#   systemctl daemon-reload && systemctl enable rc.local
 
 #重新配置语言为中文
 #sudo dpkg-reconfigure locales
