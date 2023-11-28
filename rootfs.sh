@@ -36,9 +36,10 @@ apt -y install parted
 #	firmware（必须先安装它才能安装内核，否则有问题）
 #	linux内核
 #	openstick-utils(手动安装，现置于deb/目录下，或者见https://github.com/hyx0329/openstick-failsafe-guard)
+#   openssh-server
 #最好还要安装：
-#   openssh-server net-tools locales
-#其中，linux内核的两个包必须用dpkg -i安装，否则不会生成initrd.img
+#   net-tools locales
+#其中，linux内核的两个包必须用dpkg -i安装，否则不会生成initrd.img(也不一定，这个很玄学，得apt和dpkg交替安装几次)
 
 #以下内容通过分析苏苏小亮亮的rootfs得到
 #mobian包有：
@@ -77,20 +78,21 @@ apt -y install parted
 #       mobian-setup-usb-network
 #       mobian-usb-gadget
 
-#添加的网络配置（安装到/etc/NetworkManager/system-connections/,权限改为600）：
+#添加的网络配置（配置文件同样来自苏苏小亮亮，置于configure_files/，安装到/etc/NetworkManager/system-connections/,权限改为600）：
 #       bridge.nmconnection  modem.nmconnection  USB.nmconnection  wifi.nmconnection usb.nmconnection
 #       两个usb.nmconnection，一个大写，一个小写
 #       小写的那个似乎是用于网桥的，由于windows不兼容，改名为usb_.nmconnection,需要改回去
-#以上网络服务与配置可能与openstick-utils有冲突，只能安装二者之一
+#以上网络服务与配置可能与openstick-utils的网络配置有冲突，只能安装二者之一
 #并且openstick-utils的服务是用deb-systemd-helper开启的，似乎有点那啥
 #       deb-systemd-helper disable 禁用服务？
 
 #可能还需要更改：（不清楚作用,现置于configure_files/）
-#   hosts
+#   hosts（复制到/etc/）
 #另外更改并启用：(启动时先开启再关闭USB，大概是为了启用usb？现置于bin_sh_service/)
-#rc.local（置于/etc/）
-#rc.local.service（置于/etc/systemd/system/）
-
+#   rc.local（复制到/etc/）
+#   rc.local.service（复制到/etc/systemd/system/）
+#开启rc.local
+#   systemctl daemon-reload && systemctl enable rc-local
 
 #重新配置语言为中文
 #sudo dpkg-reconfigure locales

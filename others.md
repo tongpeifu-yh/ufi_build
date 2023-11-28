@@ -36,12 +36,12 @@ dtc -I dtb -O dts -o output.dts device_tree.dtb
 
 ## 4、gc与adbd
 gc来自：<https://github.com/HandsomeMod/gc>  
-adbd未知，大概可用<https://github.com/tonyho/adbd-linux>构建？  
+adbd未知，大概可用<https://github.com/tonyho/adbd-linux>（依赖openssl1.0）或者<https://github.com/kiddlu/android-adbd-for-linux>构建？  
 按照<https://github.com/hyx0329/openstick-failsafe-guard/blob/dev/bin/README.md>中的说法，[staticx](https://github.com/JonathonReinhart/staticx)可用用于转化可执行程序为静态链接
 
 ## 5、构建adbd
 警告：暂时未测试是否有效！建议还是用openstick-utils里面的！  
-构建<https://github.com/tonyho/adbd-linux>  
+构建<https://github.com/tonyho/adbd-linux>：  
 构建好的相关文件已经打包至compiled_package/adbd.tar.gz，其中在adbd-linux目录下执行`make install`即可安装adbd，或者手动复制adb/adbd和adb/xdg-adbd两个文件到/usr/sbin，然后复制adbd.service到/usr/lib/systemd/system/后启用服务  
 
 首先构建1.0版本openssl   

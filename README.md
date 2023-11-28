@@ -5,6 +5,7 @@ prepare.sh
 kernel.sh  
 rootfs.sh  
 boot.sh  
+sh文件并非可以直接执行的脚本，只是我懒得写markdown排版  
 遇到奇怪的问题，或许可以从`others.md`中找到答案  
 ## 参考教程有：
 ### 1、构建底包
