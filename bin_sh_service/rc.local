@@ -1,6 +1,0 @@
-#!/bin/sh -e
-# 下面这条是要开机启动的命令
-nmcli connection up USB
-sleep 5
-nmcli connection down USB
-exit 0
