@@ -6,7 +6,7 @@
 
 然后刷写boot.img和rootfs.img：
 
-```
+```Shell
 fastboot flash boot boot.img
 fastboot -S 200m flash rootfs sparse_rootfs.img
 ```
@@ -17,4 +17,10 @@ fastboot -S 200m flash rootfs sparse_rootfs.img
 
 ```Shell
 resize2fs /dev/mmcblk0p14
+```
+
+如果启动后使用apt安装软件报错`Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate.  Could not handshake: Error in the certificate verification.`，可能是因为系统时间不正确，需要手动校准或者开启自动同步：
+
+```Shell
+sudo date -s "2026-10-20 14:30:00"
 ```
