@@ -47,13 +47,13 @@ HOME=/root sudo chroot $ROOTFS /bin/bash --login -i
 
 ```Shell
 apt update
-apt -y install iputils-ping iproute2 \
+apt -y install iputils-ping iproute2 iw \
 	lsb-release vim whois sudo systemd \
     systemd-sysv kmod network-manager \
     parted openssh-server net-tools \
     locales dnsmasq netfilter-persistent \
     unattended-upgrades zram-tools gawk \
-    initramfs-tools
+    initramfs-tools wget curl
 ```
 
 ### Mobian软件
@@ -71,7 +71,7 @@ apt install alsa-ucm-conf f2fs-tools libglib2.0-0 libglib2.0-bin \
     qrtr-tools rmtfs
 ```
 
-`其中qrtr`和`rmtfs`这两个可能需要自行构建安装（如果使用较新的源应该可以直接安装`rmtfs`、`qrtr-tools`、`libqrtr1`）。其中，`rmtfs`来自：https://github.com/andersson/rmtfs ，`qrtr`来自：https://github.com/andersson/qrtr 。
+其中`qrtr`和`rmtfs`这两个可能需要自行构建安装（如果使用较新的源应该可以直接安装`rmtfs`、`qrtr-tools`、`libqrtr1`）。其中，`rmtfs`来自：https://github.com/andersson/rmtfs ，`qrtr`来自：https://github.com/andersson/qrtr 。
 
 ### 配置服务
 
