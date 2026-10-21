@@ -41,6 +41,8 @@ sudo qemu-debootstrap --arch=${ARCH} \
 HOME=/root sudo chroot $ROOTFS /bin/bash --login -i
 ```
 
+> 注意，像sudo这类权限中含有`s`位的程序一旦经过拷贝，`s`位就会丢失，程序功能就会异常。因此，底包应当直接挂载rootfs镜像并在其中构建，而不是先在主机文件系统中构建然后再拷贝到rootfs。
+
 ### 安装必要的软件
 
 进入底包中，可用自由使用apt命令安装软件。以下是必须安装的：
