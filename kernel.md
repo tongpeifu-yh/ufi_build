@@ -57,9 +57,11 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
 
    进入`Networking support → Networking options`，
 
-   -  开启 `TCP/IP networking` （选 y），开启下面的`IP: advanced router`（选 y），再开启下面出现的 `IP: policy routing`（选 y）。也可直接把 `TCP/IP networking` 的所有子项都选 y。
-   - 开启`The IPv6 protocol`（选 m）并进入，开启`IPv6: Multiple Routing Tables`（选 y）。
-   - 开启`QoS and/or fair queueing`（选 y）并进入，开启`Hierarchical Token Bucket (HTB)`、`Fair Queue Controlled Delay AQM (FQ_CODEL)`、`Common Applications Kept Enhanced (CAKE)`（都 m）。
+   -  开启 `TCP/IP networking` （选 y），开启下面的`IP: advanced router`（选 y），再开启下面出现的 `IP: policy routing`和`IP: equal cost multipath`（都 y）。
+   -  开启`The IPv6 protocol`（选 m）并进入，
+      -  开启`IPv6: Multiple Routing Tables`（选 y），开启下面出现的`IPv6: source address based routing`（选 y）。
+      -  开启`IPv6: multicast routing` （选 y）。
+   -  开启`QoS and/or fair queueing`（选 y）并进入，开启`Hierarchical Token Bucket (HTB)`、`Fair Queue Controlled Delay AQM (FQ_CODEL)`、`Common Applications Kept Enhanced (CAKE)`（都 m）。
 
    进入`Device Drivers → Network device support`，开启 `WireGuard secure network tunnel`（选 m）。
 
