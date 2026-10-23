@@ -23,7 +23,7 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
     bindeb-pkg
 ```
 
-该内核的问题是版本5.15，比较老。如果有需要可以克隆上游[github.com/msm8916-mainline/linux](https://github.com/msm8916-mainline/linux)，需要手动配置。若使用该上游，需要在menuconfig时手动启用下面的模块：
+该内核的问题是版本5.15，比较老。如果有需要可以克隆上游[github.com/msm8916-mainline/linux](https://github.com/msm8916-mainline/linux)，需要手动配置。若使用该上游，以6.12.1为例，需要在menuconfig时手动启用下面的模块：
 
 1. USB Gadget
 
@@ -71,8 +71,9 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
 
 5. 文件系统与文件格式
 
-   - 进入`File systems → DOS/FAT/EXFAT/NT Filesystems` ，开启`MSDOS fs support`、`exFAT filesystem support`（都 m）。
    - 进入`File systems`，开启` F2FS filesystem support`（选 m）。
+   - 进入`File systems → DOS/FAT/EXFAT/NT Filesystems` ，开启`MSDOS fs support`、`exFAT filesystem support`、`NTFS Read-Write file system support`（都 m），并确保`Default iocharset for FAT`、`Default iocharset for exFAT`都是`utf8`。
+   - 进入`File systems → Native language support`，开启`Simplified Chinese charset (CP936, GB2312)`、`NLS UTF-8`（都 m），并确保`Default NLS Option` 是`utf8`。
    - 进入`File systems → Miscellaneous filesystems`，开启`SquashFS 4.0 - Squashed file system support`（选 m）。
    - 进入`Executable file formats`，开启 `Kernel support for MISC binaries`（选 m）。
 
@@ -91,8 +92,9 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
    进入`Device Drivers → USB support`，
 
    - 开启`USB Wireless Device Management support`（选 m）。
+   - 开启`USB Attached SCSI`（选 m）。
    - 开启`USB Serial Converter support`（选 m）并进入，开启 `USB Qualcomm Serial modem`、`USB driver for GSM and CDMA modems`（都 m）。
-
+   
    进入`Device Drivers → Network device support` ，开启`PPP (point-to-point protocol) support`（选 m），再开启其下的`PPP BSD-Compress compression`、`PPP Deflate compression`、`PPP MPPE compression (encryption)`、`PPP over Ethernet`、`PPP support for async serial ports`、`PPP support for sync tty ports`（都 m）。
 
 以下模块可以关闭：
