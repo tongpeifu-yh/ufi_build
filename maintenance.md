@@ -117,3 +117,12 @@ pmount /dev/sda1
 ```
 
 默认直接挂载在`/media`目录下。
+
+### 中继USB无线网卡的网络
+
+中继USB无线网卡的网络，如果其他设备连接棒子的热点后始终不能上网，可能需要在棒子连接USB无线网络之后重启`wifi`，更新防火墙规则:
+
+```bash
+nmcli connection down wifi && nmcli connection up wifi
+```
+

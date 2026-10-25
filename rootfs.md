@@ -94,7 +94,21 @@ systemctl disable dnsmasq
 
 ### 网络配置
 
-添加下列网络配置（配置文件同样来自苏苏小亮亮，有修改，置于`configure_files/`，安装到`/etc/NetworkManager/system-connections/`，权限改为600）：`bridge.nmconnection`，`modem.nmconnection`，`usb.nmconnection`，`wifi.nmconnection`。
+从`nm_configs_separate_wifi_usb`和`nm_configs_union_wifi_usb`中选择一个，将其中的文件拷贝到`/etc/NetworkManager/system-connections/`目录下，权限改为600。其中，`nm_configs_separate_wifi_usb`目录下的配置是USB共享网络和wifi热点分离的，两个是不同的局域网；`nm_configs_union_wifi_usb`则是把二者桥接在一起，在同一个局域网内。前者问题是如果电脑通过USB连接棒子，默认情况下无法通过局域网访问棒子热点连接的其他设备；后者的问题是不能中继其他wifi比如USB无线网卡的流量。
+
+然后，还需要开启IP转发功能。编辑 `/etc/sysctl.conf`，找到下列文本位置：
+
+```
+# Uncomment the next line to enable packet forwarding for IPv4
+#net.ipv4.ip_forward=1
+
+# Uncomment the next line to enable packet forwarding for IPv6
+#  Enabling this option disables Stateless Address Autoconfiguration
+#  based on Router Advertisements for this host
+#net.ipv6.conf.all.forwarding=1
+```
+
+根据提示把`net.ipv4.ip_forward=1`和`net.ipv6.conf.all.forwarding=1`取消注释即可。
 
 ### 安装openstick-utils
 
