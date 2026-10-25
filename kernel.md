@@ -81,7 +81,7 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
 
    进入`Device Drivers → Network device support → Wireless LAN`，
 
-   - 开启`MediaTek devices`（选 y），开启下面的`MediaTek MT7601U (USB) support`（选 m）。
+   - 开启`MediaTek devices`（选 y），按需开启下面的`MediaTek MT7601U (USB) support`（选 m）。注意，如果确实需要使用该型号网卡，驱动源码可能需要修改，详见`mainttenance.md`。
    - 开启`Realtek devices`（选 y），按需开启下面的网卡驱动（选 m）。
 
    进入`Device Drivers → Network device support → USB Network Adapters`，
